@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, flash, redirect, session, g
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm, MessageForm, EditProfileForm
@@ -18,9 +18,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = (
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-toolbar = DebugToolbarExtension(app)
+# toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -57,11 +57,8 @@ def do_logout():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     """Handle user signup.
-
     Create new user and add to DB. Redirect to home page.
-
     If form not valid, present form.
-
     If the there already is a user with that username: flash message
     and re-present form.
     """
@@ -125,7 +122,6 @@ def logout():
 @app.route('/users')
 def list_users():
     """Page with listing of users.
-
     Can take a 'q' param in querystring to search by that username.
     """
 
@@ -225,6 +221,11 @@ def profile(user_id):
         location = form.location.data
         user.bio = bio
         user.location = location
+        user.username = form.username.data
+        user.image_url = form.image_url.data
+        user.header_image_url = form.header_image_url.data
+        user.email = form.email.data
+        user.password = form.password.data
         # db.session.add(user)
         db.session.commit()
         return redirect(f'/users/{user_id}')
@@ -253,7 +254,6 @@ def delete_user():
 @app.route('/messages/new', methods=["GET", "POST"])
 def messages_add():
     """Add a message:
-
     Show form if GET. If valid, update message and redirect to user page.
     """
 
@@ -303,7 +303,6 @@ def messages_destroy(message_id):
 @app.route('/')
 def homepage():
     """Show homepage:
-
     - anon users: no messages
     - logged in: 100 most recent messages of followed_users
     """
