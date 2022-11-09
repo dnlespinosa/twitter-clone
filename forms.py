@@ -27,6 +27,8 @@ class LoginForm(FlaskForm):
 class EditProfileForm(FlaskForm):
     """Edit profile form"""
 
+    username = StringField('username', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired()])
     bio = StringField('bio', validators=[DataRequired()])
     location = StringField('location', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=6)])

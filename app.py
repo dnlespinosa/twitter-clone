@@ -223,10 +223,11 @@ def profile(user_id):
     if form.validate_on_submit():
         bio = form.bio.data
         location = form.location.data
-        user = User(bio=bio, location=location)
-        db.session.add(user)
+        user.bio = bio
+        user.location = location
+        # db.session.add(user)
         db.session.commit()
-        return redirect('/users/<int:user_id>')
+        return redirect(f'/users/{user_id}')
     return render_template('/users/edit.html', user=user, form=form)
 
 
