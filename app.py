@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm, MessageForm, EditProfileForm
-from models import db, connect_db, User, Message
+from models import db, connect_db, User, Message, Likes
 
 CURR_USER_KEY = "curr_user"
 
@@ -246,6 +246,28 @@ def delete_user():
     db.session.commit()
 
     return redirect("/signup")
+
+@app.route('/users/add_like/<int:message_id>', methods=['POST'])
+def add_like(message_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    current_likes = Likes.query.all()
+    for like in current_likes:
+        if like.message_id == message_id:
+            db.session.delete(like)
+            db.session.commit()
+            return redirect('/')
+        else:
+            likes = Likes(user_id=g.user.id, message_id=message_id)
+            
+            db.session.add(likes)
+            db.session.commit()
+
+    
+            return redirect('/')
+    
 
 
 ##############################################################################

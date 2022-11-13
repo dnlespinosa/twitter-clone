@@ -41,6 +41,17 @@ class UserModelTestCase(TestCase):
 
         self.client = app.test_client()
 
+        user1 = User.signup('user1', 'youremail@gmail.com', 'password', None)
+        user2 = User.signup('user2', 'youreemail2@gmail.com', 'password', None)
+        user1.id=1
+        user2.id=2
+        db.session.commit()
+
+        self.user1 = user1
+        self.user2 = user2
+        self.user1.id = 1
+        self.user2.id = 2
+
     def test_user_model(self):
         """Does basic model work?"""
 
@@ -56,3 +67,21 @@ class UserModelTestCase(TestCase):
         # User should have no messages & no followers
         self.assertEqual(len(u.messages), 0)
         self.assertEqual(len(u.followers), 0)
+        
+    def test_follows(self):
+        self.user1.following.append(self.user2)
+        db.session.commit()
+
+        self.assertEqual(len(self.user1.following), 1)
+        self.assertEquals(len(self.user2.followers), 1)
+    def test_doesnt_follow(self):
+        self.assertEqual(len(self.user1.following), 0)
+    def test_create(self):
+        self.assertTrue(self.user1)
+    # def test_false_create(self):
+    #     user_false_test = User.signup('test', None, 'password', None)
+    #     user_false_test.id = 5
+    #     with self.assertRaises(exc.IntegrityError) as context:
+    #         db.session.commit()
+    def test_authenticate(self):
+        self.assertTrue(self.user1.username, self.user1.password)

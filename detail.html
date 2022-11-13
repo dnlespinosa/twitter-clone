@@ -30,7 +30,9 @@
           </li>
           <li class="stat">
             <p class="small">Likes</p>
-            <h4>TBD</h4>
+            <!-- work on this -->
+            <h4>{{ user.likes | length}}</h4>
+            <!-- work on this -->
           </li>
           <div class="ml-auto">
             {% if g.user.id == user.id %}
