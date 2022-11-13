@@ -85,3 +85,5 @@ class UserModelTestCase(TestCase):
     #         db.session.commit()
     def test_authenticate(self):
         self.assertTrue(self.user1.username, self.user1.password)
+        self.assertFale('USERUSER', self.user1.password)
+        self.assetFalse(self.user1.username, 'PASSPASS')
